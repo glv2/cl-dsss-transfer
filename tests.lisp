@@ -86,7 +86,8 @@
           (radio (format nil "file=~a" (namestring samples)))
           (decoded nil))
       (transmit-buffer data :radio-driver radio :bit-rate 600)
-      (receive-callback (lambda (data) (setf decoded data))
+      (receive-callback (lambda (data)
+                          (setf decoded (concatenate 'vector decoded data)))
                         :radio-driver radio
                         :bit-rate 600)
       (is (equalp data decoded)))))
