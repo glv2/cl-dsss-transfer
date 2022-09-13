@@ -6,7 +6,7 @@
 (defsystem "dsss-transfer"
   :name "dsss-transfer"
   :description "Send and receive data with SDRs using DSSS modulation"
-  :version "1.0"
+  :version "1.1"
   :author "Guillaume LE VAILLANT"
   :license "GPL-3"
   :depends-on ("cffi" "cl-octet-streams" "float-features")
@@ -16,7 +16,7 @@
 (defsystem "dsss-transfer/tests"
   :name "dsss-transfer/tests"
   :description "Tests fot dsss-transfer"
-  :version "1.0"
+  :version "1.1"
   :author "Guillaume LE VAILLANT"
   :license "GPL-3"
   :depends-on ("fiveam" "dsss-transfer" "uiop")

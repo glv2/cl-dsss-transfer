@@ -52,12 +52,14 @@
                                               :audio t
                                               :sample-rate 48000
                                               :frequency 1500
-                                              :bit-rate 30)
+                                              :bit-rate 120
+                                              :spreading-factor 16)
         (receive-file (namestring decoded) :radio-driver radio
                                            :audio t
                                            :sample-rate 48000
                                            :frequency 1500
-                                           :bit-rate 30)
+                                           :bit-rate 120
+                                           :spreading-factor 16)
         (is (same-files-p *message* decoded))))))
 
 (test transmit-and-receive-stream

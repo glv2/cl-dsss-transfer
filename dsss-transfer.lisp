@@ -63,6 +63,7 @@
   (frequency-offset :long)
   (gain :string)
   (ppm :float)
+  (spreading-factor :unsigned-int)
   (inner-fec :string)
   (outer-fec :string)
   (id :string)
@@ -82,6 +83,7 @@
   (frequency-offset :long)
   (gain :string)
   (ppm :float)
+  (spreading-factor :unsigned-int)
   (inner-fec :string)
   (outer-fec :string)
   (id :string)
@@ -132,8 +134,8 @@
                         (radio-driver "") emit file data-callback
                         callback-context (sample-rate 2000000) (bit-rate 100)
                         (frequency 434000000) (frequency-offset 0) (gain 0)
-                        (ppm 0.0) (inner-fec "h128") (outer-fec "none")
-                        (id "") dump timeout audio)
+                        (ppm 0.0) (spreading-factor 64) (inner-fec "h128")
+                        (outer-fec "none") (id "") dump timeout audio)
   "Initialize a transfer."
   (when (or (and file data-callback)
             (and (not file) (not data-callback)))
@@ -150,6 +152,7 @@
                                                 gain
                                                 (format nil "~d" gain))
                                             ppm
+                                            spreading-factor
                                             inner-fec
                                             outer-fec
                                             id
@@ -171,6 +174,7 @@
                                                          gain
                                                          (format nil "~d" gain))
                                                      ppm
+                                                     spreading-factor
                                                      inner-fec
                                                      outer-fec
                                                      id
@@ -204,8 +208,8 @@
                       &key
                         (radio-driver "") (sample-rate 2000000) (bit-rate 100)
                         (frequency 434000000) (frequency-offset 0) (gain 0)
-                        (ppm 0.0) (inner-fec "h128") (outer-fec "none")
-                        (id "") dump audio (final-delay 0.0))
+                        (ppm 0.0) (spreading-factor 64) (inner-fec "h128")
+                        (outer-fec "none") (id "") dump audio (final-delay 0.0))
   "Transmit the data from FILE."
   (let ((transfer (make-transfer :emit t
                                  :file file
@@ -216,6 +220,7 @@
                                  :frequency-offset frequency-offset
                                  :gain gain
                                  :ppm ppm
+                                 :spreading-factor spreading-factor
                                  :inner-fec inner-fec
                                  :outer-fec outer-fec
                                  :id id
@@ -233,8 +238,8 @@
                      &key
                        (radio-driver "") (sample-rate 2000000) (bit-rate 100)
                        (frequency 434000000) (frequency-offset 0) (gain 0)
-                       (ppm 0.0) (inner-fec "h128") (outer-fec "none")
-                       (id "") dump timeout audio)
+                       (ppm 0.0) (spreading-factor 64) (inner-fec "h128")
+                       (outer-fec "none") (id "") dump timeout audio)
   "Receive data into FILE."
   (let ((transfer (make-transfer :emit nil
                                  :file file
@@ -245,6 +250,7 @@
                                  :frequency-offset frequency-offset
                                  :gain gain
                                  :ppm ppm
+                                 :spreading-factor spreading-factor
                                  :inner-fec inner-fec
                                  :outer-fec outer-fec
                                  :id id
@@ -300,11 +306,11 @@
 
 (defun transmit-stream (stream
                         &key
-                          (radio-driver "") (sample-rate 2000000)
-                          (bit-rate 100) (frequency 434000000)
-                          (frequency-offset 0) (gain 0) (ppm 0.0)
-                          (inner-fec "h128") (outer-fec "none")
-                          (id "") dump audio (final-delay 0.0))
+                          (radio-driver "") (sample-rate 2000000) (bit-rate 100)
+                          (frequency 434000000) (frequency-offset 0) (gain 0)
+                          (ppm 0.0) (spreading-factor 64) (inner-fec "h128")
+                          (outer-fec "none") (id "") dump audio
+                          (final-delay 0.0))
   "Transmit the data from STREAM."
   (let* ((*data-stream* stream)
          (*buffer* (make-array 1024 :element-type '(unsigned-byte 8)))
@@ -318,6 +324,7 @@
                                   :frequency-offset frequency-offset
                                   :gain gain
                                   :ppm ppm
+                                  :spreading-factor spreading-factor
                                   :inner-fec inner-fec
                                   :outer-fec outer-fec
                                   :id id
@@ -333,11 +340,10 @@
 
 (defun receive-stream (stream
                        &key
-                         (radio-driver "") (sample-rate 2000000)
-                         (bit-rate 100) (frequency 434000000)
-                         (frequency-offset 0) (gain 0) (ppm 0.0)
-                         (inner-fec "h128") (outer-fec "none")
-                         (id "") dump timeout audio)
+                         (radio-driver "") (sample-rate 2000000) (bit-rate 100)
+                         (frequency 434000000) (frequency-offset 0) (gain 0)
+                         (ppm 0.0) (spreading-factor 64) (inner-fec "h128")
+                         (outer-fec "none") (id "") dump timeout audio)
   "Receive data to STREAM."
   (let* ((*data-stream* stream)
          (*buffer* (make-array 1024 :element-type '(unsigned-byte 8)))
@@ -351,6 +357,7 @@
                                   :frequency-offset frequency-offset
                                   :gain gain
                                   :ppm ppm
+                                  :spreading-factor spreading-factor
                                   :inner-fec inner-fec
                                   :outer-fec outer-fec
                                   :id id
@@ -366,8 +373,9 @@
                           (start 0) end (radio-driver "") (sample-rate 2000000)
                           (bit-rate 100) (frequency 434000000)
                           (frequency-offset 0) (gain 0) (ppm 0.0)
-                          (inner-fec "h128") (outer-fec "none") (id "")
-                          dump audio (final-delay 0.0))
+                          (spreading-factor 64) (inner-fec "h128")
+                          (outer-fec "none") (id "") dump audio
+                          (final-delay 0.0))
   "Transmit the data between START and END in BUFFER."
   (with-octet-input-stream (stream buffer start (or end (length buffer)))
     (transmit-stream stream
@@ -378,6 +386,7 @@
                      :frequency-offset frequency-offset
                      :gain gain
                      :ppm ppm
+                     :spreading-factor spreading-factor
                      :inner-fec inner-fec
                      :outer-fec outer-fec
                      :id id
@@ -386,11 +395,10 @@
                      :final-delay final-delay)))
 
 (defun receive-buffer (&key
-                         (radio-driver "") (sample-rate 2000000)
-                         (bit-rate 100) (frequency 434000000)
-                         (frequency-offset 0) (gain 0) (ppm 0.0)
-                         (inner-fec "h128") (outer-fec "none") (id "")
-                         dump timeout audio)
+                         (radio-driver "") (sample-rate 2000000) (bit-rate 100)
+                         (frequency 434000000) (frequency-offset 0) (gain 0)
+                         (ppm 0.0) (spreading-factor 64) (inner-fec "h128")
+                         (outer-fec "none") (id "") dump timeout audio)
   "Receive data into a new octet vector and return it."
   (with-octet-output-stream (stream)
     (receive-stream stream
@@ -401,6 +409,7 @@
                     :frequency-offset frequency-offset
                     :gain gain
                     :ppm ppm
+                    :spreading-factor spreading-factor
                     :inner-fec inner-fec
                     :outer-fec outer-fec
                     :id id
@@ -428,8 +437,8 @@
                            (radio-driver "") (sample-rate 2000000)
                            (bit-rate 100) (frequency 434000000)
                            (frequency-offset 0) (gain 0) (ppm 0.0)
-                           (inner-fec "h128") (outer-fec "none") (id "")
-                           dump timeout audio)
+                           (spreading-factor 64) (inner-fec "h128")
+                           (outer-fec "none") (id "") dump timeout audio)
   "Receive data and call a FUNCTION on it. The FUNCTION must take one octet
 vector as argument."
   (let* ((*user-function* function)
@@ -443,6 +452,7 @@ vector as argument."
                                   :frequency-offset frequency-offset
                                   :gain gain
                                   :ppm ppm
+                                  :spreading-factor spreading-factor
                                   :inner-fec inner-fec
                                   :outer-fec outer-fec
                                   :id id

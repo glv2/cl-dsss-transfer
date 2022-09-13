@@ -1,6 +1,6 @@
 #+TITLE: dsss-transfer
 #+AUTHOR: Guillaume LE VAILLANT
-#+DATE: 2022-05-10
+#+DATE: 2022-09-13
 #+EMAIL: glv@posteo.net
 #+LANGUAGE: en
 #+OPTIONS: num:nil toc:nil html-postamble:nil html-scripts:nil
@@ -43,7 +43,8 @@ The key parameters of the following functions match the ones described in
 (transmit-file file
                &key
                  radio-driver sample-rate bit-rate frequency frequency-offset
-                 gain ppm inner-fec outer-fec id dump audio final-delay)
+                 gain ppm spreading-factor inner-fec outer-fec id dump audio
+                 final-delay)
 => T
 #+END_SRC
 
@@ -53,7 +54,8 @@ Transmit the data from /file/.
 (receive-file file
               &key
                 radio-driver sample-rate bit-rate frequency frequency-offset
-                gain ppm inner-fec outer-fec id dump timeout audio)
+                gain ppm spreading-factor inner-fec outer-fec id dump timeout
+                audio)
 => T
 #+END_SRC
 
@@ -63,7 +65,8 @@ Receive data into /file/.
 (transmit-stream stream
                  &key
                    radio-driver sample-rate bit-rate frequency frequency-offset
-                   gain ppm inner-fec outer-fec id dump audio final-delay)
+                   gain ppm spreading-factor inner-fec outer-fec id dump audio
+                   final-delay)
 => T
 #+END_SRC
 
@@ -73,7 +76,8 @@ Transmit the data from /stream/.
 (receive-stream stream
                 &key
                   radio-driver sample-rate bit-rate frequency frequency-offset
-                  gain ppm inner-fec outer-fec id dump timeout audio)
+                  gain ppm spreading-factor inner-fec outer-fec id dump timeout
+                  audio)
 => T
 #+END_SRC
 
@@ -83,8 +87,8 @@ Receive data into /stream/.
 (transmit-buffer buffer
                  &key
                    start end radio-driver sample-rate bit-rate frequency
-                   frequency-offset gain ppm inner-fec outer-fec id
-                   dump audio final-delay)
+                   frequency-offset gain ppm spreading-factor inner-fec
+                   outer-fec id dump audio final-delay)
 => T
 #+END_SRC
 
@@ -93,7 +97,8 @@ Transmit the data between /start/ and /end/ in /buffer/.
 #+BEGIN_SRC lisp
 (receive-buffer &key
                   radio-driver sample-rate bit-rate frequency frequency-offset
-                  gain ppm inner-fec outer-fec id dump timeout audio)
+                  gain ppm spreading-factor inner-fec outer-fec id dump timeout
+                  audio)
 => bytes
 #+END_SRC
 
@@ -103,7 +108,8 @@ Receive data into a new octet vector and return it.
 (receive-callback function
                   &key
                     radio-driver sample-rate bit-rate frequency frequency-offset
-                    gain ppm inner-fec outer-fec id dump timeout audio)
+                    gain ppm spreading-factor inner-fec outer-fec id dump
+                    timeout audio)
 => T
 #+END_SRC
 
@@ -126,7 +132,8 @@ Get or set the verbosity level.
   (make-transfer (&key
                     radio-driver emit file data-callback callback-context
                     sample-rate bit-rate frequency frequency-offset gain
-                    ppm inner-fec outer-fec id dump timeout audio)
+                    ppm spreading-factor inner-fec outer-fec id dump timeout
+                    audio)
   => foreign pointer
 #+END_SRC
 
